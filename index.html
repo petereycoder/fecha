@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+		<script type="text/javascript" src="cordova.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<script src="js/jquery-1.11.2.min.js"></script>
+		<script src="js/jQueryMobile/jquery.mobile-1.4.5.min.js"></script>
+        <title>Edad</title>
+    </head>
+    <body>
+        <div data-role="page" id="inicio">
+  <div data-role="header" style="background-color:green; color:yellow;">
+  <h1>Edad</h1>
+  </div>
+
+  <div data-role="content">
+    <form id="formulario">
+      
+				<label>Fecha de Nacimiento:</label>
+				<input type="date"  id="fecha1" required="true"/>      
+				<label>Fecha Actual:</label>
+				<input type="date"  id="fecha2" required="true"/>
+				<input type="submit" class="btn btn-primary" value="Calcular"/>
+    </form>
+  </div>
+</div>
+
+<div data-role="page" id="home">
+	<div data-role="header" style="background-color:green; color:yellow;">
+		<h1>Edad</h1>
+	</div>
+	<div data-role="content">
+		<div id="resultado">
+            <b>Edad: </b> <input text="number" name="edad" id="edad" readonly/>
+            <span><b>Tu edad en</b></span><br>
+            <span>Dias:<b><input text="number" name="dias" id="dias" readonly/></b><span>
+            <span>Semanas:<b><input text="number" name="semanas" id="semanas" readonly/></b><span>
+            <span>Meses:<b><input text="number" name="meses" id="meses" readonly/></b><span><br>
+        <div>
+		<div>
+			<form id="regresar" >
+              <input type="submit" class="btn btn-success" value="Regresar">
+        </form>  
+		</div>
+
+<script>
+			$('#formulario').submit(function() {
+    var fecha1 = $("#fecha1").val();
+    var fecha2 = $("#fecha2").val();
+	var a1 = fecha1.substring(0,4);
+	var m1 = fecha1.substring(5,7);
+    var d1 = fecha1.substring(8,10);
+	
+    var d2 = fecha2.substring(8,10);
+    var m2 = fecha2.substring(5,7);
+    var a2 = fecha2.substring(0,4);
+    //alert(d2+"/"+m2+"/"+a2);
+   // var resul = $.isNumeric(d1);
+   // alert(resul);
+
+    if($.isNumeric(d1) || $.isNumeric(m1) || $.isNumeric(a1) || $.isNumeric(a2) || $.isNumeric(m2) || $.isNumeric(a2)){
+        if(a2 < a1){
+            alert("Inserta correctamente la fecha actual");
+        }else{
+            var edad = Edad(a1,a2,m1,m2,d1,d2);
+            //alert(edad);
+            $("#edad").val(edad);
+           // alert(DiasEdad(edad,a1));
+            var dias = DiasEdad(a1,a2,m1,m2,d1,d2);
+            $("#dias").val(dias);
+            var semanas = SemanasEdad(dias);
+            $("#semanas").val(semanas);
+            var meses = MesEdad(dias);
+            $("#meses").val(meses);
+            $.mobile.changePage("#home")  
+        }
+    }else if(fecha1.length == 0 || fecha2.length == 0){
+       //alert(fecha1.length );
+        alert("Inserta correctamente la fechas"); 
+    }else{
+        alert("Inserta correctamente la fechas");
+    }
+   
+    $("#fecha1").val("");
+    $("#fecha2").val("");
+   return false;
+    
+});
+
+function Edad(anio1,anio2,mes1,mes2,dia1,dia2){
+    if(mes2 < mes1){
+        return anio2 - anio1 -1;
+    }else {
+        return anio2 - anio1;
+    }
+
+    if(dia2 < dia1){
+      return anio2 - anio1 -1;  
+    }
+}
+
+function DiasEdad(anio1,anio2,mes1,mes2,dia1,dia2){
+    var count = 0;
+    count = Date.UTC(anio2,mes2-1,dia2,0,0,0)-Date.UTC(anio1,mes1-1,dia1,0,0,0);
+    var secleft= count/1000/60;
+    var hrsleft= secleft/60;
+    var daysleft= hrsleft/24;
+    count = daysleft;
+    //count = edad * 365 + count;
+    return count;
+}
+
+function SemanasEdad(dias){
+    return parseInt(dias/7);
+}
+
+function MesEdad(dias){
+    return parseInt(dias*0.0328);
+}
+
+
+$('#regresar').submit(function() { 
+    $("#fecha1").val("");
+    $("#fecha2").val("");
+    $("#edad").val("");
+    $("#dias").val("");
+    $("#semanas").val("");
+    $("#meses").val("");
+    $.mobile.changePage("#inicio")
+    return false;
+    
+});
+		</script>
+    </body>
+</html>
