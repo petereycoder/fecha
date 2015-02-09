@@ -55,9 +55,9 @@
     <form id="formulario">
       
 				<label>Fecha de Nacimiento:</label>
-				<input type="date"  id="fecha1" required="true"/>      
+				<input type="text" id="fecha1" placeholder="DD/MM/YYYY" required="true"/>      
 				<label>Fecha Actual:</label>
-				<input type="date"  id="fecha2" required="true"/>
+				<input type="text" id="fecha2" placeholder="DD/MM/YYYY"/>
 				<input type="submit" class="btn btn-primary" value="Calcular"/>
     </form>
   </div>
@@ -85,13 +85,12 @@
 			$('#formulario').submit(function() {
     var fecha1 = $("#fecha1").val();
     var fecha2 = $("#fecha2").val();
-	var a1 = fecha1.substring(0,4);
-	var m1 = fecha1.substring(5,7);
-    var d1 = fecha1.substring(8,10);
-	
-    var d2 = fecha2.substring(8,10);
-    var m2 = fecha2.substring(5,7);
-    var a2 = fecha2.substring(0,4);
+	var d1 = fecha1.substring(0,2);
+    var m1 = fecha1.substring(3,5);
+    var a1 = fecha1.substring(6,10);
+    var d2 = fecha2.substring(0,2);
+    var m2 = fecha2.substring(3,5);
+    var a2 = fecha2.substring(6,10);
     //alert(d2+"/"+m2+"/"+a2);
    // var resul = $.isNumeric(d1);
    // alert(resul);
